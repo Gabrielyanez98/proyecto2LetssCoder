@@ -17,7 +17,7 @@ function getData(){
         clasificacion(data.standings[0].table);
     });
 }
-
+console.log("hola")
 
 
 
