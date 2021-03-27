@@ -24,10 +24,10 @@
                 <a class="nav-link active" aria-current="page" href="index.html">Partidos</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="clasification.html">Clasificación</a>
+                <a class="nav-link active" href="clasification.html">Clasificación</a>
               </li>
               <li class="nav-item ">
-                <a class="nav-link " href="estadisticas.html" >
+                <a class="nav-link active" href="estadisticas.html" >
                   Estadísticas
                 </a>
             </ul>
@@ -43,7 +43,7 @@
          
              <div class="d-flex flex-row mt-3">
               <label>Todos los partidos <input type="radio" name="equipos" id="todos" value="todos" ></label>
-              <label>&nbsp;&nbsp;Finalizados <input type="radio" name="equipos" id="finalizados" value="finalizados"></label>
+              <label>&nbsp;&nbsp;Finalizados <input type="radio"  name="equipos" id="finalizados" value="finalizados"></label>
               <label>&nbsp;&nbsp;Por jugar <input type="radio" name="equipos" id="porJugar" value="porJugar"></label>
               <label>&nbsp;&nbsp;Victorias <input type="radio" name="equipos" id="victoria" value="victorias"></label>
               <label>&nbsp;&nbsp;Derrotas <input type="radio" name="equipos" id="derrota" value="derrotas"></label>
@@ -55,11 +55,14 @@
     </div>
     <br>
     <br>
-    <h1 class="titulo">Partidos</h1>   
-  
+    
+      <h1>Partidos</h1> 
+    
+      
+    <br>
     
 
-    <section class="sectionTable">
+    <section class="container">
     <table class="table table-hover table-bordered border-dark table-dark">
         <thead>
             <tr class="table-dark celda">
@@ -76,10 +79,14 @@
 <div id="mensajeError">
 
 </div>
+<div id="miSpinner">
 
+</div>
+
+ 
     
     <script src="matches.js"></script>
-    <script src="./filtros/filtrosPartidos.js"></script>
+    <script src="filtros/filtrosPartidos.js"></script>
 </body>
 
 </html>

@@ -2,6 +2,9 @@ getData();
 
 function getData() {
     const url = "https://api.football-data.org/v2/competitions/2014/matches";
+
+    mostrarSpinner();
+
     fetch(url, {
         method: "GET",
         headers: {
@@ -10,32 +13,48 @@ function getData() {
     }).then(response => {
         if (response.ok) return response.json();
     }).then(data => {
-        console.log(data);
-        filtrar(data)
-        listaPartidos(data);
-        
         document.addEventListener("DOMContentLoaded", listaPartidos(data.matches));
+        console.log(data);
+        
+        
+        //listaPartidos(data);
+        
+       
+         
         document.addEventListener("click", filtrar(data.matches));
-        filtroPartidosTerminados(data.matches);
-         filtroPartidosPorJugar(data.matches);
+       
+        //Filtro partidos Terminados
+        filtroPartidosTerminados = data.matches.filter(function (element) { return element.status == "FINISHED"; });
+
+        //Filtro partidos por jugar
+        filtroPartidosPorJugar = data.matches.filter(function (element) { return element.status == "SCHEDULED"; });
+
     })
 
 
 }
 
 
+// Función que muestra el filtro de partidos terminados y por jugar según si el usuario ha seleccionado un radio-button o el otro.
+document.addEventListener("click", mostrarSeleccionCompleta);
+
+function mostrarSeleccionCompleta() {
+   //mostrarSpinner();
+    if (document.querySelector("[value=finalizados]").checked) {
+        eliminarTabla();
+        listaPartidos(filtroPartidosTerminados);
+    } else if (document.querySelector("[value=porJugar]").checked) {
+        eliminarTabla();
+        listaPartidos(filtroPartidosPorJugar);
+    }
+}
 
 
-
-        // Llamo a la función que imprime la tabla de todos los partidos jugados
-        // Llamo a la función que imprime la tabla de todos los partidos jugados
-//document.addEventListener("DOMContentLoaded", listaPartidos(data.matches))
 
 //Filtro general según el equipo seleccionado
 function filtrar(partidos) {
-
     eliminarTabla();
-
+   
     for (let i = 0; i < partidos.length; i++) {
         let equipo = document.getElementById("buscador").value;
 
@@ -46,21 +65,47 @@ function filtrar(partidos) {
         let golesEquipoLocal = partidos[i].score.fullTime.homeTeam;
         let golesEquipoVisitante = partidos[i].score.fullTime.awayTeam;
 
-        
 
-         if (equipoLocal.toLowerCase().indexOf(equipo.toLowerCase()) !== -1 || equipoVisitante.toLowerCase().indexOf(equipo.toLowerCase()) !== -1) {
+        //Condicional que se encarga de filtrar lo que desea buscar el usuario
+        if (equipoLocal.toLowerCase().indexOf(equipo.toLowerCase()) !== -1 || equipoVisitante.toLowerCase().indexOf(equipo.toLowerCase()) !== -1) {
 
+            //Esta función definida más adelante genera una tabla estándard en base a los que le pasemos por parámetros
             mostrarSeleccionEquipos(idEquipoLocal, equipoLocal, golesEquipoLocal, golesEquipoVisitante, idEquipoVisitante, equipoVisitante);
 
-        } 
-        if(equipo = ""){
-            listaPartidos(data.matches)
-            console.log("hola")
         }
 
+        // Serie de condicionales que según el radio-button seleccionado hará un filtro u otro en base al equipo que el usuario desee consultar
+        if (document.querySelector("[value=todos]").checked) {
+            eliminarTabla();
+            listaPartidos(partidos);
+        } else if (document.querySelector("[value=victorias]").checked) {
+            eliminarTabla();
+            filtrarEquipoVictorias(partidos);
+        } else if (document.querySelector("[value=derrotas]").checked) {
+            eliminarTabla();
+            filtrarEquipoDerrotas(partidos);
+        } else if (document.querySelector("[value=empates]").checked) {
+            eliminarTabla();
+            filtrarEquipoEmpates(partidos);
+        }
+
+
+        //En caso de que la búsqueda esté vacía se mostrará siempre la tabla completa.
+        if (equipo = "") {
+            listaPartidos(data.matches)
+        }
+        //En caso de se busque un equipo que no existe no se podrá generar ninguna tabla por lo que mandaremos un mensaje de error al no haber ninguna tabla.
     }
     if (!tabla.firstChild) {
         mensajeError();
+    } else {
+        let error = document.querySelector("#mensajeError");
+        error.removeChild(error.firstChild);
+    }   
+
+    let miSpinner = document.querySelector("#miSpinner");
+    if(tabla.firstChild){
+        miSpinner.removeChild(miSpinner.firstChild);
     }
 }
 
@@ -72,46 +117,15 @@ function mostrarSeleccionEquipos(idEquipoLocal, equipoLocal, golesEquipoLocal, g
     let contentGenerate = document.createElement("tr");
 
     contentGenerate.innerHTML = `
-<td><img src="https://crests.football-data.org/${idEquipoLocal}.svg" class="fotoIconos"> ${equipoLocal}</td>
-<td> ${golesEquipoLocal} </td> 
-<td>  ${golesEquipoVisitante}</td> 
-<td> <img src="https://crests.football-data.org/${idEquipoVisitante}.svg" class="fotoIconos">${equipoVisitante}</td>
-`;
+        <td><img src="https://crests.football-data.org/${idEquipoLocal}.svg" class="fotoIconos"> ${equipoLocal}</td>
+        <td> ${golesEquipoLocal} </td> 
+        <td>  ${golesEquipoVisitante}</td> 
+        <td> <img src="https://crests.football-data.org/${idEquipoVisitante}.svg" class="fotoIconos">${equipoVisitante}</td>
+      `;
 
     generateTable.appendChild(contentGenerate);
 }
 
-
-document.addEventListener("click", mostrarSeleccionCompleta);
-
-//Función que activa los filtros según el "radio-button" que seleccione el usuario
-function mostrarSeleccionCompleta() {
-    if (document.querySelector("[value=todos]").checked) {
-        eliminarTabla();
-        listaPartidos(data.matches);
-    } else if (document.querySelector("[value=finalizados]").checked) {
-        eliminarTabla();
-        listaPartidos(filtroPartidosTerminados);
-    } else if (document.querySelector("[value=porJugar]").checked) {
-        eliminarTabla();
-        listaPartidos(filtroPartidosPorJugar);
-    } else if (document.querySelector("[value=victorias]").checked) {
-        //eliminarTabla();
-        filtrarEquipoVictorias(data.matches);
-    } else if (document.querySelector("[value=derrotas]").checked) {
-        eliminarTabla();
-        filtrarEquipoDerrotas(data.matches);
-    } else if (document.querySelector("[value=empates]").checked) {
-        eliminarTabla();
-        filtrarEquipoEmpates(data.matches);
-    }
-}
-
-//Filtro partidos Terminados
- let filtroPartidosTerminados = data.matches.filter(function (element) { return element.status == "FINISHED"; });
-
-//Filtro partidos por jugar
- let filtroPartidosPorJugar = data.matches.filter(function (element) { return element.status == "SCHEDULED";});
 
 // Función para eliminar la tabla
 function eliminarTabla() {
@@ -123,43 +137,40 @@ function eliminarTabla() {
 
 // Filtro por victorias
 function filtrarEquipoVictorias(partidos) {
-
+    
     eliminarTabla();
+    
     let equipo;
+    //console.log(partidos[0].homeTeam.name)
     for (let i = 0; i < partidos.length; i++) {
-         equipo = document.getElementById("buscador").value;
-          
+        equipo = document.getElementById("buscador").value;
+
         let equipoVisitante = partidos[i].awayTeam.name;
         let idEquipoVisitante = partidos[i].awayTeam.id;
         let equipoLocal = partidos[i].homeTeam.name;
         let idEquipoLocal = partidos[i].homeTeam.id;
         let golesEquipoLocal = partidos[i].score.fullTime.homeTeam;
         let golesEquipoVisitante = partidos[i].score.fullTime.awayTeam;
-        
-        
+
+
         if (equipoLocal.toLowerCase().indexOf(equipo.toLowerCase()) !== -1) {
             if (partidos[i].score.winner == "HOME_TEAM") {
                 mostrarSeleccionEquipos(idEquipoLocal, equipoLocal, golesEquipoLocal, golesEquipoVisitante, idEquipoVisitante, equipoVisitante);
             }
         }
-        
+
         if (equipoVisitante.toLowerCase().indexOf(equipo.toLowerCase()) !== -1) {
             if (partidos[i].score.winner == "AWAY_TEAM") {
                 mostrarSeleccionEquipos(idEquipoLocal, equipoLocal, golesEquipoLocal, golesEquipoVisitante, idEquipoVisitante, equipoVisitante);
             }
-        }   
-       
+        }
+
     }
-    if(equipo == ""){
-        eliminarTabla();
+    if (equipo == "") {
+        
         listaPartidos(data.matches);
     }
-}    
-    
-    
-    /*if (!tabla.firstChild) {
-        mensajeError();
-    }*/
+}
 
 // Filtro por derrotas
 function filtrarEquipoDerrotas(partidos) {
@@ -167,7 +178,7 @@ function filtrarEquipoDerrotas(partidos) {
     eliminarTabla();
     let equipo;
     for (let i = 0; i < partidos.length; i++) {
-         equipo = document.getElementById("buscador").value;
+        equipo = document.getElementById("buscador").value;
 
         let equipoVisitante = partidos[i].awayTeam.name;
         let idEquipoVisitante = partidos[i].awayTeam.id;
@@ -187,17 +198,17 @@ function filtrarEquipoDerrotas(partidos) {
             }
         }
     }
-    if(equipo == ""){
-        eliminarTabla();
+    if (equipo == "") {
+        
         listaPartidos(data.matches);
     }
 }
 
 // Filtro por empates
 function filtrarEquipoEmpates(partidos) {
-
-    eliminarTabla();
     
+    eliminarTabla();
+
     for (let i = 0; i < partidos.length; i++) {
         let equipo = document.getElementById("buscador").value;
 
@@ -215,7 +226,8 @@ function filtrarEquipoEmpates(partidos) {
         }
 
     }
-    
+
+
 }
 
 // Función que muestra un mensaje de error en caso de que tras la búsqueda del usuario no se encuentre ningún equipo
@@ -226,4 +238,29 @@ function mensajeError() {
     mensaje.innerHTML = `¡Hubo un error inesperado! no se ha podido encontrar el equipo: <strong>  "${equipo}" </strong>`;
     error.appendChild(mensaje);
     error.classList.add("estiloMensajeError");
+    
+}
+
+
+function mostrarSpinner(){
+    eliminarTabla();
+    
+    let miSpinner = document.querySelector("#tabla");
+    
+    
+    let spinner = document.createElement("div");
+    spinner.classList.add('spinner');
+
+    spinner.innerHTML = `
+    <div class="double-bounce1"></div>
+  <div class="double-bounce2"></div>
+    `;
+    
+    miSpinner.appendChild(spinner)
+    
+    
+    
+    
+
+    
 }

@@ -20,30 +20,31 @@ function getData(){
 
 //console.log(data);
 function listaPartidos(partidos){
-
-let d = document;
-
-for (var i = 0; i < partidos.length; i++) {
-  let generateTable = d.getElementById("tabla");
-  let contentGenerate = d.createElement("tr");
-
-
-  if (partidos[i].status != "FINISHED" && partidos[i].status != "FINISHED"){
-    partidos[i].score.fullTime.awayTeam = "Por jugar";
-    partidos[i].score.fullTime.homeTeam = "Por jugar";
-  };
   
-    contentGenerate.innerHTML = `
-  <td><img src="https://crests.football-data.org/${partidos[i].homeTeam.id}.svg" class="fotoIconos"> ${partidos[i].homeTeam.name}</td>
-  <td> ${partidos[i].score.fullTime.homeTeam} </td> 
-  <td>  ${partidos[i].score.fullTime.awayTeam}</td> 
-  <td> <img src="https://crests.football-data.org/${partidos[i].awayTeam.id}.svg" class="fotoIconos">${partidos[i].awayTeam.name}</td>
-  `;
+  let d = document;
   
-  generateTable.append(contentGenerate);
-
-}
-}
+  for (var i = 0; i < partidos.length; i++) {
+    let generateTable = d.getElementById("tabla");
+    let contentGenerate = d.createElement("tr");
+  
+  
+    if (partidos[i].status != "FINISHED" && partidos[i].status != "FINISHED"){
+      partidos[i].score.fullTime.awayTeam = "Por jugar";
+      partidos[i].score.fullTime.homeTeam = "Por jugar";
+    };
+    
+      contentGenerate.innerHTML = `
+    <td><img src="https://crests.football-data.org/${partidos[i].homeTeam.id}.svg" class="fotoIconos"> ${partidos[i].homeTeam.name}</td>
+    <td> ${partidos[i].score.fullTime.homeTeam} </td> 
+    <td>  ${partidos[i].score.fullTime.awayTeam}</td> 
+    <td> <img src="https://crests.football-data.org/${partidos[i].awayTeam.id}.svg" class="fotoIconos">${partidos[i].awayTeam.name}</td>
+    `;
+    
+    generateTable.append(contentGenerate);
+    
+  
+  }
+  }
 
 //listaPartidos(data.matches);
 

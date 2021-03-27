@@ -1,5 +1,7 @@
 
 
+
+
 getData();
 
 function datos(){
@@ -58,10 +60,11 @@ function estadisticas(data, team) {
   //Genero un nuevo array en el que almacenaré cada partido en un elemento
   let totalPartidos = [];
   for (var i = 0; i < matches.length; i++) {
-
+    if(matches[i].status == "FINISHED"){
     totalPartidos.push(matches[i]);
-
+    }
   }
+  console.log(totalPartidos)
   //Obtengo el porcentaje de empates dividiendo el total de elementos de los arrays creados anteriormente y lo multiplico por 100 para obtener el porcentaje deseado
   let porcentajeEmpates = (empates.length / totalPartidos.length) * 100;
   //Al obtener un número con tantos decimales utilizo el método toFixed para mostrar únicamente un porcentaje con dos decimales
@@ -81,8 +84,7 @@ function estadisticas(data, team) {
     GolesMarcados.push(teams[i].goalsFor);
     arraydeEquipos.push(teams[i].team.name);
   }
-console.log(GolesMarcados)
-console.log(arraydeEquipos)
+
   //Como ambos arrays por defecto tendrán el mismo orden, pues el nombre de cada club se encontrará siempre en la misma posición que los goles que marcó, creo una variable (posicionEquipo) en la que se almacenará la posición en la que se encuentra el  número de goles que estoy buscando, en este caso el número más alto que indica el más goleador.
   for (var i = 0; i < GolesMarcados.length; i++) {
     equipoGolesMarcados = Math.max.apply(null, GolesMarcados);
@@ -90,7 +92,7 @@ console.log(arraydeEquipos)
   let posicionEquipo = GolesMarcados.indexOf(equipoGolesMarcados);
   console.log(posicionEquipo)
 
-  //A continuación almaceno en una variable el nombre del equipo que se encuentra en la posición que almacené en la variable anterior (posicionEquipo) de esta forma la variable que estoy creando recibirá el nombre del equipo que ha marcado el número de goles que le corresponde gracias a que la variable "posicionEquipo" coincidirá siempre con la posición del nombre del club que marcó los goles correespondientes, gracias, repito, a que por defecto nos vendrá ordenado en el propio objeto tanto el nombre del club como los goles marcados.
+  //A continuación almaceno en una variable el nombre del equipo que se encuentra en la posición que almacené en la variable anterior (posicionEquipo), de esta forma la variable que estoy creando recibirá el nombre del equipo que ha marcado el número de goles que le corresponde gracias a que la variable "posicionEquipo" coincidirá siempre con la posición del nombre del club que marcó los goles correespondientes, gracias, repito, a que por defecto nos vendrá ordenado en el propio objeto tanto el nombre del club como los goles marcados.
   let nombreEquipoGoleador;
   nombreEquipoGoleador = arraydeEquipos[posicionEquipo];
 
@@ -322,24 +324,53 @@ console.log(arraydeEquipos)
   }
 
 
-  //Partidos arbitrados por "Valentín Pizarro"
+  //Partidos arbitrados por distintos árbitros
 
-  //Para buscar los partidos arbitrados por "Valentín Pizarro" necesito recorrer dos arrays, primero el array de los partidos total jugados, y el segundo array en el que se almacenan los 4 árbitros, y gracias a un condicional puedo crear un array en cuyos elementos se almacene el nombre de "Valentín Pizarro", que posteriormente mostraré el total de partidos arbitrados por este árbitro mostrando la longitud del array mediante .length
-  let arbitro = [];
+  //Para buscar los partidos arbitrados por "Valentín Pizarro" necesito recorrer dos arrays, primero el array de los partidos total jugados, y el segundo array en el que se almacenan los 4 árbitros, y gracias a un condicional puedo crear un array en cuyos elementos se almacene el nombre de "Valentín Pizarro", que posteriormente mostraré el total de partidos arbitrados por este árbitro mostrando la longitud del array mediante .length. Lo mismo hago con otros 4 árbitros.
+  let arbitroValentin = [];
   for (let i = 0; i < matches.length; i++) {
     for (let j = 0; j < matches[i].referees.length; j++) {
       if (matches[i].status == "FINISHED" && matches[i].referees[j].name == "Valentín Pizarro") {
-
-        arbitro.push("Valentín")
-
+        arbitroValentin.push("Valentín")
+      }
+    }
+  }
+ 
+  let arbitroJesus = [];
+  for (let i = 0; i < matches.length; i++) {
+    for (let j = 0; j < matches[i].referees.length; j++) {
+      if (matches[i].status == "FINISHED" && matches[i].referees[j].name == "Jesús Gil") {
+        arbitroJesus.push("Jesús")
+      }
+    }
+  }
+  
+  let arbitroJose = [];
+  for (let i = 0; i < matches.length; i++) {
+    for (let j = 0; j < matches[i].referees.length; j++) {
+      if (matches[i].status == "FINISHED" && matches[i].referees[j].name == "José Sánchez") {
+        arbitroJose.push("José")
       }
     }
   }
 
+  let arbitroCesar = [];
+  for (let i = 0; i < matches.length; i++) {
+    for (let j = 0; j < matches[i].referees.length; j++) {
+      if (matches[i].status == "FINISHED" && matches[i].referees[j].name == "César Soto") {
+        arbitroCesar.push("César")
+      }
+    }
+  }
 
-
-
-
+  let arbitroJuan = [];
+  for (let i = 0; i < matches.length; i++) {
+    for (let j = 0; j < matches[i].referees.length; j++) {
+      if (matches[i].status == "FINISHED" && matches[i].referees[j].name == "Juan Martínez") {
+        arbitroJuan.push("Juan")
+      }
+    }
+  }
 
 
 
@@ -480,29 +511,21 @@ console.log(arraydeEquipos)
        </td>
       <td> <img src="https://crests.football-data.org/${iconoClubGoleador}.svg" class="fotoIconos"> ${nombreEquipoGoleador}: ${equipoGolesMarcados}  </td>
       <td><img src="https://crests.football-data.org/${iconoClubGoleado}.svg" class="fotoIconos"> ${nombreEquipoMasGoleado}: ${equipoGolesRecibidos}  </td>
-      <td> ${arbitro.length}</td>
+      <td>Valentín Pizarro: ${arbitroValentin.length}</td>
       <td><img src="https://crests.football-data.org/${iconoClubMasEmpates}.svg" class="fotoIconos">${equipoConMasEmpates}: ${empatesTotalesDelEquipo}</td>
     `;
 
 
 
-  filaDos.innerHTML = `<td>Porcentaje: ${empateConDecimal}%</td> <td> <img src="https://crests.football-data.org/${iconoSegundoClubGoleador}.svg" class="fotoIconos"> ${nombreSegundoEquipoGoleador}: ${segundoEquipoGoleador}</td><td> <img src="https://crests.football-data.org/${iconoSegundoClubGoleado}.svg" class="fotoIconos"> ${nombreSegundoEquipoGoleado}: ${segundoEquipoGoleado}</td><td></td><td><img src="https://crests.football-data.org/${iconoSegundoEquipoEmpates}.svg" class="fotoIconos">${nombreSegundoEquipoEmpates}: ${segundoEquipoEmpates}</td>`
+  filaDos.innerHTML = `<td>Porcentaje: ${empateConDecimal}%</td> <td> <img src="https://crests.football-data.org/${iconoSegundoClubGoleador}.svg" class="fotoIconos"> ${nombreSegundoEquipoGoleador}: ${segundoEquipoGoleador}</td><td> <img src="https://crests.football-data.org/${iconoSegundoClubGoleado}.svg" class="fotoIconos"> ${nombreSegundoEquipoGoleado}: ${segundoEquipoGoleado}</td><td>Jesús Gil: ${arbitroJesus.length}</td><td><img src="https://crests.football-data.org/${iconoSegundoEquipoEmpates}.svg" class="fotoIconos">${nombreSegundoEquipoEmpates}: ${segundoEquipoEmpates}</td>`
 
-  filaTres.innerHTML = `<td></td><td> <img src="https://crests.football-data.org/${iconoTercerClubGoleador}.svg" class="fotoIconos"> ${nombreTercerEquipoGoleador}: ${tercerEquipoGoleador}</td><td> <img src="https://crests.football-data.org/${iconoTercerClubGoleado}.svg" class="fotoIconos"> ${nombreTercerEquipoGoleado}: ${tercerEquipoGoleado}</td><td></td><td><img src="https://crests.football-data.org/${iconoTercerEquipoEmpates}.svg" class="fotoIconos">${nombreTercerEquipoEmpates}: ${tercerEquipoEmpates}</td>`
+  filaTres.innerHTML = `<td></td><td> <img src="https://crests.football-data.org/${iconoTercerClubGoleador}.svg" class="fotoIconos"> ${nombreTercerEquipoGoleador}: ${tercerEquipoGoleador}</td><td> <img src="https://crests.football-data.org/${iconoTercerClubGoleado}.svg" class="fotoIconos"> ${nombreTercerEquipoGoleado}: ${tercerEquipoGoleado}</td><td>José Sánchez: ${arbitroJose.length}</td><td><img src="https://crests.football-data.org/${iconoTercerEquipoEmpates}.svg" class="fotoIconos">${nombreTercerEquipoEmpates}: ${tercerEquipoEmpates}</td>`
 
-  filaCuatro.innerHTML = `<td></td><td> <img src="https://crests.football-data.org/${iconoCuartoClubGoleador}.svg" class="fotoIconos"> ${nombreCuartoEquipoGoleador}: ${cuartoEquipoGoleador}</td><td> <img src="https://crests.football-data.org/${iconoCuartoClubGoleado}.svg" class="fotoIconos"> ${nombreCuartoEquipoGoleado}: ${cuartoEquipoGoleado}</td><td></td><td><img src="https://crests.football-data.org/${iconoCuartoEquipoEmpates}.svg" class="fotoIconos">${nombreCuartoEquipoEmpates}: ${cuartoEquipoEmpates}</td>`
+  filaCuatro.innerHTML = `<td></td><td> <img src="https://crests.football-data.org/${iconoCuartoClubGoleador}.svg" class="fotoIconos"> ${nombreCuartoEquipoGoleador}: ${cuartoEquipoGoleador}</td><td> <img src="https://crests.football-data.org/${iconoCuartoClubGoleado}.svg" class="fotoIconos"> ${nombreCuartoEquipoGoleado}: ${cuartoEquipoGoleado}</td><td>César Soto: ${arbitroCesar.length}</td><td><img src="https://crests.football-data.org/${iconoCuartoEquipoEmpates}.svg" class="fotoIconos">${nombreCuartoEquipoEmpates}: ${cuartoEquipoEmpates}</td>`
 
-  filaCinco.innerHTML = `<td></td><td> <img src="https://crests.football-data.org/${iconoQuintoClubGoleador}.svg" class="fotoIconos"> ${nombreQuintoEquipoGoleador}: ${quintoEquipoGoleador}</td><td> <img src="https://crests.football-data.org/${iconoQuintoClubGoleado}.svg" class="fotoIconos"> ${nombreQuintoEquipoGoleado}: ${quintoEquipoGoleado}</td><td></td><td><img src="https://crests.football-data.org/${iconoQuintoEquipoEmpates}.svg" class="fotoIconos">${nombreQuintoEquipoEmpates}: ${quintoEquipoEmpates}</td>`
+  filaCinco.innerHTML = `<td></td><td> <img src="https://crests.football-data.org/${iconoQuintoClubGoleador}.svg" class="fotoIconos"> ${nombreQuintoEquipoGoleador}: ${quintoEquipoGoleador}</td><td> <img src="https://crests.football-data.org/${iconoQuintoClubGoleado}.svg" class="fotoIconos"> ${nombreQuintoEquipoGoleado}: ${quintoEquipoGoleado}</td><td>Juan Martínez: ${arbitroJuan.length}</td><td><img src="https://crests.football-data.org/${iconoQuintoEquipoEmpates}.svg" class="fotoIconos">${nombreQuintoEquipoEmpates}: ${quintoEquipoEmpates}</td>`
 
   generateTable.append(filaUno, filaDos, filaTres, filaCuatro, filaCinco);
 
 }
-
-
-
-
-
-
-
-
 

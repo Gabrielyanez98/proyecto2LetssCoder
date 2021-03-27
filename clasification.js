@@ -17,7 +17,7 @@ function getData(){
         clasificacion(data.standings[0].table);
     });
 }
-console.log("hola")
+
 
 
 
@@ -39,4 +39,3 @@ for (let i = 0; i < partidos.length; i++){
     generateTable.append(contentGenerate);
 }
 }
-
